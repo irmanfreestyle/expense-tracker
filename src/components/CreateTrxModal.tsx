@@ -45,7 +45,7 @@ export default function CreateTrxModal({ onAddTransaction }: Props) {
               </div>
               <div className="mb-4">
                 <label htmlFor="date">Date</label>
-                <TextField type="date" value={today} placeholder="14 October 2023" id="date" {...register('date')} />
+                <TextField type="date" defaultValue={today} placeholder="14 October 2023" id="date" {...register('date')} />
               </div>
               <div className="mb-4">
                 <div className="flex items-center gap-3">
