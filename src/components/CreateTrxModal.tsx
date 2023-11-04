@@ -1,17 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextField from "./base/TextField";
 import Button from "./base/Button";
 import Select from "./base/Select";
 import { ITransaction } from "@/types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { transactionService } from "@/service/transaction.service";
+import moment from "moment";
 
-export default function CreateTrxModal() {
+type Props = {
+  onAddTransaction: () => void
+}
+
+export default function CreateTrxModal({ onAddTransaction }: Props) {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<ITransaction>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [today, setToday] = useState<string>('');
+
+  useEffect(() => {
+    setToday(moment().format('YYYY-MM-DD'));
+  }, [])
 
   const createTransaction: SubmitHandler<ITransaction> = data => {
     transactionService.add(data);
+    onAddTransaction();
+    setIsOpen(false);
   }
 
   return (
@@ -29,12 +41,11 @@ export default function CreateTrxModal() {
               <h3 className="font-semibold text-lg mb-5">Add new Transaction</h3>
               <div className="mb-4">
                 <label htmlFor="title">Title</label>
-                <input type="text" />
                 <TextField type="text" placeholder="Snack" id="title" {...register('title')} />
               </div>
               <div className="mb-4">
                 <label htmlFor="date">Date</label>
-                <TextField type="date" placeholder="14 October 2023" id="date" {...register('date')} />
+                <TextField type="date" value={today} placeholder="14 October 2023" id="date" {...register('date')} />
               </div>
               <div className="mb-4">
                 <div className="flex items-center gap-3">

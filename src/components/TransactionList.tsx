@@ -1,22 +1,17 @@
-import { ITransaction } from "@/types";
-import moment from "moment";
-import TransactionItem from "./TransactionItem";
-import { transactionService } from "@/service/transaction.service";
+import { IGroupTransaction } from "@/types";
+import MonthCard from "./MonthCard";
 
-export default function TransactionList() {
-  const groupedTransactions = transactionService.get();
-  const groupList = Object.keys(groupedTransactions);
+type Props = {
+  groupedTransactions: IGroupTransaction[]
+}
 
-  return groupList.map(key => {
-    const transactions: ITransaction[] = groupedTransactions[key];
-
+export default function TransactionList({ groupedTransactions }: Props) {
+  return groupedTransactions.map(trx => {
     return (
-      <div key={key}>
-        <TransactionItem items={transactions} />
+      <div key={trx.month}>
+        <MonthCard items={trx.transactions} />
         <div className="flex justify-center py-2">------</div>
       </div>
     )
   })
-
-  // REFACTOR LIST IT
 }

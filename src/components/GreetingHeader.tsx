@@ -10,7 +10,7 @@ export default function GreetingHeader() {
     const currentTime = new Date();
     const currentHour = currentTime.getHours();
 
-    if (currentHour <= 5 && currentHour < 12) {
+    if (currentHour >= 5 && currentHour < 12) {
       return {
         image: morningBg,
         label: 'Good Morning',
