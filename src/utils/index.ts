@@ -8,7 +8,7 @@ export const toDate = (date: string) => {
   return moment(date).format('DD MMMM YYYY');
 }
 
-export const toRupiah = (value: number) => {
+export const toIDR = (value: number) => {
   const formatter = new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
