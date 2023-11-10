@@ -12,7 +12,7 @@ type Props = {
 }
 
 export default function CreateTrxModal({ onAddTransaction }: Props) {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<ITransaction>();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<ITransaction>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [today, setToday] = useState<string>('');
 
@@ -23,6 +23,11 @@ export default function CreateTrxModal({ onAddTransaction }: Props) {
   const createTransaction: SubmitHandler<ITransaction> = data => {
     transactionService.add(data);
     onAddTransaction();
+    setIsOpen(false);
+  }
+
+  const closeModal = () => {
+    reset();
     setIsOpen(false);
   }
 
@@ -41,17 +46,17 @@ export default function CreateTrxModal({ onAddTransaction }: Props) {
               <h3 className="font-semibold text-lg mb-5">Add new Transaction</h3>
               <div className="mb-4">
                 <label htmlFor="title">Title</label>
-                <TextField type="text" placeholder="Snack" id="title" {...register('title')} />
+                <TextField type="text" defaultValue={''} placeholder="Snack" id="title" {...register('title', { required: true })} className={errors.title && '!border-red-500'} />
               </div>
               <div className="mb-4">
                 <label htmlFor="date">Date</label>
-                <TextField type="date" defaultValue={today} placeholder="14 October 2023" id="date" {...register('date')} />
+                <TextField type="date" defaultValue={today} placeholder="14 October 2023" id="date" {...register('date', { required: true })} className={errors.date && '!border-red-500'} />
               </div>
               <div className="mb-4">
                 <div className="flex items-center gap-3">
                   <div className="flex-1">
                     <label htmlFor="type">Type</label>
-                    <Select defaultValue={''} id="type" {...register('type')}>
+                    <Select defaultValue={''} id="type" {...register('type', { required: true })} className={errors.type && '!border-red-500'}>
                       <option value="" disabled>Select Type</option>
                       <option value="income">Income</option>
                       <option value="expense">Expense</option>
@@ -59,13 +64,13 @@ export default function CreateTrxModal({ onAddTransaction }: Props) {
                   </div>
                   <div className="flex-1">
                     <label htmlFor="amount">Amount</label>
-                    <TextField type="number" placeholder="Rp.100,000" id="amount" {...register('amount')} />
+                    <TextField type="number" defaultValue={''} placeholder="Rp.100,000" id="amount" {...register('amount', { required: true })} className={errors.amount && '!border-red-500'} />
                   </div>
                 </div>
               </div>
 
               <div className="flex gap-3 mt-5">
-                <Button className="text-[#12486B] flex-1" onClick={() => setIsOpen(false)}>Cancel</Button>
+                <Button className="text-[#12486B] flex-1" onClick={closeModal}>Cancel</Button>
                 <Button className="text-white bg-[#12486B] flex-1" type="submit">Add</Button>
               </div>
             </form>

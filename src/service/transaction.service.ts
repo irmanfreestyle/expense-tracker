@@ -12,6 +12,11 @@ export const transactionService = {
     const existingItems = localStorage.getItem(STORAGE_KEY) ? JSON.parse(localStorage.getItem(STORAGE_KEY) as string) : [];
     localStorage.setItem(STORAGE_KEY, JSON.stringify([...existingItems, payload]));
   },
+  delete(id: string) {
+    const items: ITransaction[] = localStorage.getItem(STORAGE_KEY) ? JSON.parse(localStorage.getItem(STORAGE_KEY) as string) : [];
+    const filteredItems = items.filter(item => item.id !== id);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(filteredItems));
+  },
   get(): IGroupTransaction[] {
     const groupedItem: IGroupTransaction[] = [];
     const items = localStorage.getItem(STORAGE_KEY) ? JSON.parse(localStorage.getItem(STORAGE_KEY) as string) : [];

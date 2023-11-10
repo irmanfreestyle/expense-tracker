@@ -1,16 +1,15 @@
+import { useContext } from "react";
 import { transactionService } from "@/service/transaction.service";
 
 import GreetingHeader from '@/components/GreetingHeader';
 import TransactionList from './components/TransactionList';
 import CreateTrxModal from './components/CreateTrxModal';
+import { TransactionContext } from "./context/TransactionContext";
 
 import listImg from '@assets/images/note-list.svg';
 
-import { IGroupTransaction } from "./types";
-import { useState } from "react";
-
 function App() {
-  const [groupedTransactions, setGroupedTransactions] = useState(transactionService.get());
+  const { groupedTransactions, setGroupedTransactions } = useContext(TransactionContext);
 
   return (
     <div className="max-w-screen-sm h-screen relative mx-auto flex flex-col">
