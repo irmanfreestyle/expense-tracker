@@ -5,6 +5,10 @@ import TransactionProvider from "./context/TransactionContext";
 
 import './index.scss'
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js');
+}
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <TransactionProvider>
