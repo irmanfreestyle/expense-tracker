@@ -21,22 +21,27 @@ export const transactionService = {
     const groupedItem: IGroupTransaction[] = [];
     const items = localStorage.getItem(STORAGE_KEY) ? JSON.parse(localStorage.getItem(STORAGE_KEY) as string) : [];
 
-    items.forEach((trx: ITransaction) => {
-      const trxMonth = moment(trx.date).format('MMM');
-      const existItemIndex = groupedItem?.findIndex(item => item.month === trxMonth);
+    items
+      .map((item: any) => ({ ...item, date: new Date(item.date) }))
+      .sort((a: any, b: any) => b.date?.getTime() - a.date?.getTime())
+      .forEach((trx: ITransaction) => {
+        const trxMonth = moment(trx.date).format('MMM');
+        const trxDate = new Date(moment(trx.date).format('YYYY-MM-DD'));
+        const existItemIndex = groupedItem?.findIndex(item => item.month === trxMonth);
 
-      if (existItemIndex > -1) {
-        groupedItem[existItemIndex].transactions.push(trx);
-        trx.type === 'income' ? groupedItem[existItemIndex].totalIncome += Number(trx.amount) : groupedItem[existItemIndex].totalExpense += Number(trx.amount);
-      } else {
-        groupedItem.push({
-          month: trxMonth,
-          transactions: [trx],
-          totalIncome: trx.type === 'income' && Number(trx.amount) || 0,
-          totalExpense: trx.type === 'expense' && Number(trx.amount) || 0,
-        })
-      }
-    });
+        if (existItemIndex > -1) {
+          groupedItem[existItemIndex].transactions.push(trx);
+          trx.type === 'income' ? groupedItem[existItemIndex].totalIncome += Number(trx.amount) : groupedItem[existItemIndex].totalExpense += Number(trx.amount);
+        } else {
+          groupedItem.push({
+            month: trxMonth,
+            date: trxDate,
+            transactions: [trx],
+            totalIncome: trx.type === 'income' && Number(trx.amount) || 0,
+            totalExpense: trx.type === 'expense' && Number(trx.amount) || 0,
+          })
+        }
+      });
 
     const monthOrder = {
       'jan': 0,
@@ -53,6 +58,8 @@ export const transactionService = {
       'dec': 11
     };
 
-    return groupedItem.sort((a, b) => monthOrder[b.month.toLowerCase() as keyof typeof monthOrder] - monthOrder[a.month.toLowerCase() as keyof typeof monthOrder]);
+    return groupedItem
+      .sort((a, b) => monthOrder[b.month.toLowerCase() as keyof typeof monthOrder] - monthOrder[a.month.toLowerCase() as keyof typeof monthOrder])
+      .sort((a, b) => b.date?.getTime() - a.date?.getTime())
   }
 }

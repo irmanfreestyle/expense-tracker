@@ -10,6 +10,7 @@ export interface ITransaction {
 
 export interface IGroupTransaction {
   month: string
+  date: Date;
   transactions: ITransaction[]
   totalIncome: number
   totalExpense: number
